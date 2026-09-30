@@ -1,0 +1,18 @@
+\inicializarSeccion{Anexos}
+\newcommand{\anexo}[1]{\refstepcounter{anexo}\textbf{Anexo \theanexo:} #1}
+
+\anexo{Simulación en Desmos} \\
+\url{https://www.desmos.com/calculator/94ozjrvbrh}
+
+\anexo{Proceso de linealización en Spreadsheets} \\
+\url{https://docs.google.com/spreadsheets/d/1FhODQ-9m2UEDTsoebz6okMA4DPj8jc1f-n0j6bARBzA/edit?usp=sharing}
+
+\anexo{Tabla completa de excel incluyendo la regresión lineal} \\
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{\nat{formula.png}}
+\end{center}
+
+\anexo{Código de Excel para obtener el valor de $k$ mediante regresión lineal} \\
+\begin{lstlisting}[basicstyle=\ttfamily\small, backgroundcolor=\color{rowgray}, frame=single, label={lst:lineest}]
+=LINEST(C2:C12,A2:A12)
+\end{lstlisting}
