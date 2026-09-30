@@ -18,5 +18,8 @@ RUN tlmgr install \
 WORKDIR /workspace
 
 COPY .latex-compiler/src ./src
+COPY .github/docker/patch_texmake_case.py /tmp/patch_texmake_case.py
+RUN python3 /tmp/patch_texmake_case.py /workspace/src/texmake.py \
+    && rm /tmp/patch_texmake_case.py
 
 CMD ["bash"]
