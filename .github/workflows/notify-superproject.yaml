@@ -1,0 +1,39 @@
+name: Notify superproject
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: notify-superproject
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require dispatch token
+        env:
+          RETO_DISPATCH_PAT: ${{ secrets.RETO_DISPATCH_PAT }}
+        run: |
+          set -euo pipefail
+          if [ -z "$RETO_DISPATCH_PAT" ]; then
+            echo "::error::Secret RETO_DISPATCH_PAT is missing. Create a fine-grained PAT with Contents: write on TEC-Andres/TC1004B.506-reto and store it as RETO_DISPATCH_PAT in this repository."
+            exit 1
+          fi
+
+      - name: Trigger docs submodule bump
+        env:
+          GH_TOKEN: ${{ secrets.RETO_DISPATCH_PAT }}
+        run: |
+          set -euo pipefail
+          payload="$(jq -n --arg sha "$GITHUB_SHA" --arg repo "$GITHUB_REPOSITORY" \
+            '{event_type:"docs-updated",client_payload:{sha:$sha,repository:$repo}}')"
+          gh api --method POST \
+            repos/TEC-Andres/TC1004B.506-reto/dispatches \
+            --input - <<<"$payload"
+          echo "Dispatched docs-updated for $GITHUB_SHA"
