@@ -1,0 +1,22 @@
+\documentclass{article}
+% biblatex configured in librerias/lib.tex
+\usepackage[utf8]{inputenc}
+\input{librerias/lib}
+\input{librerias/comandos}
+\input{librerias/estilos}
+\usepackage{tikz}
+\usetikzlibrary{mindmap, trees}
+\addbibresource{bib/references.bib}
+
+\begin{document}
+\vspace*{1.5cm}
+\input{documento/portada}
+\newpage
+\input{documento/indice}
+\newpage
+\input{documento/fase1/introduccion}
+\printbibliography
+
+\newpage
+
+\end{document}
