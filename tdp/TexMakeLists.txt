@@ -1,0 +1,13 @@
+texmake_minimum_required(xelatex VERSION 3.14159)
+project(retoIoT)
+
+# skip the engine entirely when no source or .bib changed
+incremental()
+
+set(RELEASE_OUTPUT_DIR "${TEXMAKE_SOURCE_DIR}/__release__")
+
+add_executable(retoIoT main.tex)
+
+set_target_properties(retoIoT PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${RELEASE_OUTPUT_DIR}"
+)
