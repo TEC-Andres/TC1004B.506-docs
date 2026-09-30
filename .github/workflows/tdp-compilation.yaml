@@ -1,0 +1,108 @@
+name: TDP Compilation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+      - 'tdp/**'
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'tdp/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  IMAGE: texmake:ci
+
+jobs:
+  compile:
+    name: Compile tdp/main.tex
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout docs
+        uses: actions/checkout@v4
+
+      - name: Checkout LaTeX-Compiler
+        uses: actions/checkout@v4
+        with:
+          repository: TEC-Andres/LaTeX-Compiler
+          path: .latex-compiler
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # The compiler image only provides TeX Live + texmake; the svg package
+      # needs Inkscape to convert the \includesvg assets in tdp/.
+      - name: Prepare compiler image
+        run: |
+          tr -d '\r' < .latex-compiler/.devcontainer/Dockerfile > Dockerfile.ci
+          cat >> Dockerfile.ci <<'EOF'
+
+          # CI only: Inkscape converts the \includesvg assets of the document.
+          USER root
+          RUN apt-get update \
+              && apt-get install -y --no-install-recommends inkscape \
+              && rm -rf /var/lib/apt/lists/*
+          EOF
+
+      - name: Build compiler image
+        uses: docker/build-push-action@v6
+        with:
+          context: .latex-compiler
+          file: ./Dockerfile.ci
+          tags: ${{ env.IMAGE }}
+          load: true
+          provenance: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # shell_escape lets the svg package launch Inkscape itself; texmake on
+      # LaTeX-Compiler main does not pass -shell-escape yet. Files are written
+      # as the runner user so the artifacts are readable by the job.
+      - name: Compile document
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp \
+            -e shell_escape=t \
+            -v "$GITHUB_WORKSPACE:/docs" \
+            -w /workspace \
+            "$IMAGE" \
+            bash -lc 'python3 /workspace/src/texmake.py /docs/tdp'
+
+      - name: Upload compiled PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: tdp-pdf
+          path: tdp/__release__/main.pdf
+          if-no-files-found: error
+
+      - name: Publish failure details
+        if: failure()
+        run: |
+          log="tdp/__texcache__/main.log"
+          {
+            echo "### TDP compilation failed"
+            echo '```'
+            if [ -f "$log" ]; then
+              if grep -q '^!' "$log"; then grep -A 5 '^!' "$log" | head -n 80; else tail -n 40 "$log"; fi
+            else
+              echo "no log was produced at $log"
+            fi
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload compile log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tdp-compile-log
+          path: tdp/__texcache__/main.log
+          if-no-files-found: ignore
