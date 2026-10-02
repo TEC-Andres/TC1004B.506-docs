@@ -51,3 +51,91 @@
 \makeatother
 \renewcommand{\equationautorefname}{Ecuación}
 \usepackage{cancel}
+
+% ---------------------------------------------------------------------------
+% \cite: el hipervínculo cubre la cita completa (autor, año) y apunta a la
+% referencia bibliográfica, en lugar de enlazar solo el año (comportamiento
+% por defecto de biblatex-apa).
+% ---------------------------------------------------------------------------
+\makeatletter
+
+% Año de la cita sin enlace propio: el enlace lo pone el macro "cite" alrededor
+% de toda la cita. Si el año se enlazara por su cuenta quedarían dos enlaces
+% anidados sobre la misma referencia.
+\newbibmacro*{cite:plabelyear+extradate:sin-enlace}{%
+    \begingroup
+        \let\bibhyperref\@firstofone
+        \usebibmacro{cite:plabelyear+extradate}%
+    \endgroup
+}
+
+% Igual que el macro "cite" de apa.cbx, pero con \bibhyperref (que enlaza a la
+% referencia bibliográfica) alrededor de todo el contenido, de modo que autor,
+% delimitador y año sean un solo enlace: [Naciones Unidas, 2015](enlace).
+\renewbibmacro*{cite}{%
+    \bibhyperref{%
+        \iffieldequals{namehash}{\cbx@lasthash}
+% Varias obras del mismo autor en un solo \cite
+            {\setunit{\compcitedelim}%
+                \usebibmacro{cite:plabelyear+extradate:sin-enlace}}%
+% Cita normal
+            {\ifnameundef{labelname}
+% Sin autor/editor: se usa el título
+                {\usebibmacro{cite:noname}%
+                    \setunit{\printdelim{nameyeardelim}}%
+                    \usebibmacro{cite:plabelyear+extradate:sin-enlace}%
+                    \savefield{namehash}{\cbx@lasthash}}
+% Con autor
+                {\ifnameundef{shortauthor}
+                    {\printnames{labelname}}%
+                    {\cbx@apa@ifnamesaved
+                        {\printnames{shortauthor}}
+                        {\printnames[labelname]{author}%
+                            \addspace\printnames[sabrackets]{shortauthor}}}%
+                    \setunit{\printdelim{nameyeardelim}}%
+                    \usebibmacro{cite:plabelyear+extradate:sin-enlace}%
+                    \savefield{namehash}{\cbx@lasthash}}}%
+    }%
+    \setunit{\multicitedelim}%
+}
+\makeatother
+
+% ---------------------------------------------------------------------------
+% Pies de página. El estilo "fancy" replica lo que hacía \pagestyle{plain}
+% (solo el número de página centrado, sin reglas); la nota de \pieDePagina
+% no va en el pie sino al final del cuerpo del texto (ver más abajo).
+% ---------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[R]{\thepage\hspace{-2cm}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% \pieDePagina{texto}: agrega "texto" como nota al pie de la página donde se
+% escribe el comando, y solo de esa página. La nota se coloca al final del
+% cuerpo del texto, precedida por una regla horizontal, y el número de página
+% queda centrado debajo (en el margen inferior). El cuerpo de esa página se
+% recorta el espacio que ocupe la nota, de modo que nunca se encima con el
+% texto.
+% El argumento puede ocupar varias líneas (con \\) y llevar formato, p. ej.:
+%   \pieDePagina{\emph{Fecha:} Borrador para circulación, 17 de agosto de 2026.\\
+%     \emph{Palabras clave:} problema, métodos, resultados.}
+% Debe usarse en la página deseada, por ejemplo después de un \newpage o al
+% comienzo de la sección que abre esa página.
+\makeatletter
+\long\def\pieDePagina#1{%
+    \insert\footins{%
+        \reset@font\footnotesize
+        \interlinepenalty\interfootnotelinepenalty
+        \splittopskip\footnotesep
+        \splitmaxdepth\dp\strutbox
+        \floatingpenalty\@MM
+        \hsize\columnwidth
+        \@parboxrestore
+        \color@begingroup
+            \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox
+        \par
+        \color@endgroup
+    }%
+}
+\makeatother
