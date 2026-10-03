@@ -1,4 +1,4 @@
-\begin{multicols*}{2}
+\begin{multicols}{2}
 \inicializarSeccion{Propuesta de producto}
 \begin{figure}[H]
     \centering
@@ -6,16 +6,116 @@
     \caption{Logo de ToolNest.}
     \label{fig:toolnest-logo}
 \end{figure}
-ToolNest es una caja inteligente enfocada en el sector industrial, diseñada para apoyar  al personal técnico y operativo en el control de herramientas profesionales. El sistema utiliza etiquetas RFID para identificar automáticamente las herramientas almacenadas y registrar su información en una base de datos en tiempo real. 
 
-\vspace{0.5 em}
+ToolNest es una caja inteligente enfocada en el sector industrial, diseñada para apoyar al personal técnico y operativo en el control de herramientas profesionales. El sistema utiliza etiquetas RFID para identificar automáticamente las herramientas almacenadas y registrar su información en una base de datos en tiempo real. 
+
+\vspace{0.5em}
 
 La plataforma permitirá consultar qué herramientas están disponibles, detectar cuando falta alguna y registrar la última vez que fue identificada. Cuando una herramienta no se encuentre en la caja, el sistema podrá mostrar una alerta y proporcionar un enlace para su posible reposición. Además, se contempla la incorporación de un servo motor para controlar el mecanismo físico de apertura o cierre de la caja.
+\end{multicols}
 
-\vspace{0.5 em}
+\vspace{-0.5em}
+\begin{figure}[H]
+\begin{center}
+\resizebox{0.95\linewidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily,  
+  root/.style={
+    circle,
+    fill=lvlRootBg,
+    draw=lvlRootBorder,
+    line width=2pt,
+    text=lvlRootText,
+    align=center,
+    font=\sffamily\bfseries\small,
+    inner sep=8pt
+  },  
+  sector/.style={
+    rectangle,
+    rounded corners=6pt,
+    fill=lvlSectorFill,
+    draw=lvlSectorBorder,
+    text=lvlSectorText,
+    line width=1.1pt,
+    align=center,
+    font=\sffamily\bfseries\small,
+    inner sep=8pt
+  },  
+  role/.style={
+    rectangle,
+    rounded corners=6pt,
+    fill=lvlRoleFill,
+    draw=lvlRoleBorder,
+    text=lvlRoleText,
+    line width=1.1pt,
+    align=center,
+    font=\sffamily\bfseries\small,
+    inner sep=8pt
+  },
+  tool/.style={
+    rectangle,
+    rounded corners=6pt,
+    fill=lvlToolFill,
+    draw=lvlToolBorder,
+    text=lvlToolText,
+    line width=1.1pt,
+    align=center,
+    font=\sffamily\bfseries\small,
+    inner sep=8pt
+  },  
+  arrSector/.style={-{Stealth[length=3mm, width=2.2mm]}, lvlSectorBorder, line width=2pt},
+  arrRole/.style={-{Stealth[length=3mm, width=2.2mm]}, lvlRoleBorder, line width=1.5pt},
+  arrTool/.style={-{Stealth[length=3mm, width=2.2mm]}, lvlToolBorder, line width=1.2pt},
+  arrAction/.style={-{Stealth[length=2.5mm, width=1.8mm]}, lvlRootBorder, line width=1pt, dashed}
+]
+  \node[root] (R) at (0,0) {\textbf{ToolNest}\\[2pt] (ESP)};
+  \node[sector] (S_Cat) at (-4,0) {Sensores};
+  \node[role] (S1) at (-8, 1.8) {Lector de credencial};
+  \node[role] (S2) at (-8, 0.6) {Módulo YRM100};
+  \node[tool] (T_RFID) at (-12.2, 0.6) {Pegatina RFID UHF};
+  \node[role] (S3) at (-8, -0.8) {Sensores IRs};
+  \node[sector] (A_Cat) at (4, 2.0) {Actuadores};
+  \node[role] (A1) at (8.2, 3.2) {Servo};
+  \node[role] (A2) at (8.2, 2.1) {LEDs};
+  \node[role] (A3) at (8.2, 1.0) {Buzzers};
+  \node[role] (A4) at (8.2, -0.1) {Push Buttons};
+  \node[sector] (I_Cat) at (4, -2.2) {Indicadores};
+  \node[role] (I1) at (8.2, -1.2) {Pantalla LCD};
+  \node[role] (I2) at (8.2, -2.2) {LEDs};
+  \node[role] (I3) at (8.2, -3.2) {Buzzers};
+  \draw[arrSector] (R) -- (S_Cat);
+  \draw[arrRole] (S_Cat.west) -- ++(-0.6,0) |- (S1.east);
+  \draw[arrRole] (S_Cat.west) -- (S2.east);
+  \draw[arrRole] (S_Cat.west) -- ++(-0.6,0) |- (S3.east);
+  \draw[arrTool] (S2.west) -- (T_RFID.east);
+  \draw[arrSector] (R) -- (A_Cat);
+  \draw[arrRole] (A_Cat.east) -- ++(0.6,0) |- (A1.west);
+  \draw[arrRole] (A_Cat.east) -- ++(0.6,0) |- (A2.west);
+  \draw[arrRole] (A_Cat.east) -- ++(0.6,0) |- (A3.west);
+  \draw[arrRole] (A_Cat.east) -- ++(0.6,0) |- (A4.west);
+  \draw[arrSector] (R) -- (I_Cat);
+  \draw[arrRole] (I_Cat.east) -- ++(0.6,0) |- (I1.west);
+  \draw[arrRole] (I_Cat.east) -- (I2.west);
+  \draw[arrRole] (I_Cat.east) -- ++(0.6,0) |- (I3.west);
+  \draw[arrAction, bend left=35] (S1.north) to node[midway, above=2pt, font=\small\sffamily\bfseries, text=lvlRootBorder, fill=white, inner sep=2pt, rounded corners=2pt] {Activa} (A1.west);
+  \draw[arrAction, bend left=15] (S2.north) to node[midway, above=2pt, font=\small\sffamily\bfseries, text=lvlRootBorder, fill=white, inner sep=2pt, rounded corners=2pt] {Da resultados a} (I1.west);
+  \draw[arrAction, bend right=40] (S3.south) to node[midway, below=2pt, font=\small\sffamily\bfseries, text=lvlRootBorder, fill=white, inner sep=2pt, rounded corners=2pt] {Alerta a} (I3.west);
 
-El sistema de almacenamiento de herramientas está diseñado para ser seguro y confiable, teniendo en el un sistema de autentación física por medio de un lector de credenciales y un sistema antirrobo con sensores infrarrojos. De manera física, la caja esta diseñada para que pueda abrirse de manera automática por medio de un servo, provee iluminación LED para facilitar la identificación de herramientas, cuenta con una pantalla LCD para mostrar información relevante y un sistema de alarmas para notificar situaciones críticas de manera sonora.
+\end{tikzpicture}%
+}
+\caption{Diagrama del sistema de la solución propuesta con flujos de interacción.}
+\label{fig:diagrama-toolnest}
+\end{center}
+\end{figure}
+\vspace{-0.5em}
 
-\vspace{0.5 em}
+\begin{multicols*}{2}
+El sistema de almacenamiento de herramientas está diseñado para ser seguro y confiable, teniendo en el un sistema de autentación física por medio de un lector de credenciales y un sistema antirrobo con sensores infrarrojos. De manera física, la caja esta diseñada para que pueda abrirse de manera automática por medio de un servo, provee iluminación LED para facilitar la identificación de herramientas, cuenta con una pantalla LCD para mostrar información relevante y un sistema de alarmas para notificar situaciones críticas de manera sonora, alertando a las personas a su alrededor acerca de un posible intento de robo o forzajeo de la caja.
+
+\vspace{0.5em}
+
+Los datos que manejaremos serán almacenados en una base de datos en la nube, los datos que tenemos contemplados guardar son: los usuarios, el equipo en el que pertenecen, las herramientas que se encuentran en la caja, el historial de herramientas (retiradas y devueltas) y si tiene alguna alerta de robo. Evidentemente la base de datos final será mas compleja de lo que se describe en este apartado; temas como la autenticación de los usuarios, generación de IDs únicas para usuario, equipo y herramientas, los nombres, estado y notas de las herramientas, la localización aproximada de la caja, entre otros, serán contemplados en el diseño final de la base de datos.
+
+\vspace{0.5em}
 
 Con ToolNest se busca mejorar la organización y el control de herramientas, reduciendo el tiempo que el personal técnico invierte en buscarlas o revisar manualmente el inventario. Ademas de ser una manera extremadamente versatil para darle seguimiento a material de gran valor y permite establecer responsabilidades claras sobre el uso de herramientas, promoviendo la eficiencia y la productividad en el entorno laboral.
