@@ -1,0 +1,129 @@
+\section{Desarrollo}
+\subsection{Construcción de la caja}
+\loremipsum
+
+\subsection{Programación de la base de datos}
+Para realizar la base de datos, se realizó un ejercicio de tablas y relaciones entre ellas (MOSTRAR ANEXO). A partir de esto, se realizarón correcciones triviales, dejando el siguiente modelo entidad-relación que construye la base de datos final \ref{fig:bd-final}.
+
+% Simplified ER at full text width; the complete diagram (with attributes) is an annex
+\end{multicols}
+\begin{center}
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  ent/.style={rectangle, rounded corners=1.5pt, draw=lvlSectorBorder!60, fill=lvlSectorFill, line width=0.7pt, text=lvlSectorText, font=\sffamily\bfseries\small, align=center, minimum width=2.3cm, minimum height=0.85cm},
+  rel/.style={diamond, aspect=2.2, draw=lvlRoleBorder!60, fill=lvlRoleFill, line width=0.6pt, text=lvlRoleText, font=\sffamily\bfseries\scriptsize, align=center, inner sep=1.2pt},
+  card/.style={circle, fill=white, draw=lvlRoleBorder!40, line width=0.4pt, inner sep=1pt, text=lvlRoleText, font=\sffamily\bfseries\tiny},
+  lin/.style={draw=lvlRoleBorder!55, line width=0.6pt}
+]
+  \node[ent] (ConsultasIA) at (0.25,-1.20) {ConsultasIA};
+  \node[ent] (Usuario) at (2.30,-4.00) {Usuario};
+  \node[ent] (RFID) at (0.49,-7.60) {RFID};
+  \node[ent] (Equipo) at (5.08,-0.60) {Equipo};
+  \node[ent] (Historial) at (4.92,-6.60) {Historial};
+  \node[ent] (Caja) at (7.38,-3.20) {Caja};
+  \node[ent] (Accesos) at (8.04,-9.80) {Accesos};
+  \node[ent] (Controladores) at (12.30,-5.20) {Controladores};
+  \node[ent] (Sensores) at (13.12,-1.40) {Sensores};
+  \node[ent] (LecturasSensores) at (17.55,-0.20) {Lecturas\\Sensores};
+  \node[ent] (EventosInventario) at (17.06,-4.40) {Eventos\\Inventario};
+  \node[ent] (Actuadores) at (12.63,-8.60) {Actuadores};
+  \node[ent] (EventosActuadores) at (16.24,-10.60) {Eventos\\Actuadores};
+  \node[ent] (EtiquetasHerramienta) at (18.53,-7.40) {Etiquetas\\Herramienta};
+  \node[ent] (Objeto) at (19.19,-10.60) {Objeto};
+  \node[rel] (rUCo) at (1.27,-2.60) {Realiza};
+  \node[rel] (rUE) at (3.69,-2.30) {Asocia};
+  \node[rel] (rEC) at (6.23,-1.90) {Pertenece};
+  \node[rel] (rUC) at (4.84,-3.60) {Tiene\\permiso};
+  \node[rel] (rUH) at (3.61,-5.30) {Relaciona};
+  \node[rel] (rHC) at (6.15,-4.90) {Relaciona};
+  \node[rel] (rUR) at (1.39,-5.80) {Posee};
+  \node[rel] (rRA) at (4.26,-8.70) {Usa};
+  \node[rel] (rCA) at (7.71,-6.50) {Recibe};
+  \node[rel] (rCCt) at (9.84,-4.20) {Administra};
+  \node[rel] (rCtS) at (12.71,-3.30) {Conecta};
+  \node[rel] (rCtA) at (12.46,-6.90) {Conecta};
+  \node[rel] (rSL) at (15.33,-0.80) {Genera};
+  \node[rel] (rSE) at (15.09,-2.90) {Detecta};
+  \node[rel] (rAE) at (14.43,-9.60) {Ejecuta};
+  \node[rel] (rEtE) at (17.79,-5.90) {Corresponde};
+  \node[rel] (rOE) at (18.86,-9.00) {Identifica};
+  \begin{scope}[on background layer]
+  \draw[lin] (rUCo) -- (Usuario);
+  \draw[lin] (rUCo) -- (ConsultasIA);
+  \draw[lin] (rUE) -- (Usuario);
+  \draw[lin] (rUE) -- (Equipo);
+  \draw[lin] (rEC) -- (Equipo);
+  \draw[lin] (rEC) -- (Caja);
+  \draw[lin] (rUC) -- (Usuario);
+  \draw[lin] (rUC) -- (Caja);
+  \draw[lin] (rUH) -- (Usuario);
+  \draw[lin] (rUH) -- (Historial);
+  \draw[lin] (rHC) -- (Caja);
+  \draw[lin] (rHC) -- (Historial);
+  \draw[lin] (rUR) -- (Usuario);
+  \draw[lin] (rUR) -- (RFID);
+  \draw[lin] (rRA) -- (RFID);
+  \draw[lin] (rRA) -- (Accesos);
+  \draw[lin] (rCA) -- (Caja);
+  \draw[lin] (rCA) -- (Accesos);
+  \draw[lin] (rCCt) -- (Controladores);
+  \draw[lin] (rCCt) -- (Caja);
+  \draw[lin] (rCtS) -- (Controladores);
+  \draw[lin] (rCtS) -- (Sensores);
+  \draw[lin] (rCtA) -- (Controladores);
+  \draw[lin] (rCtA) -- (Actuadores);
+  \draw[lin] (rSL) -- (Sensores);
+  \draw[lin] (rSL) -- (LecturasSensores);
+  \draw[lin] (rSE) -- (Sensores);
+  \draw[lin] (rSE) -- (EventosInventario);
+  \draw[lin] (rAE) -- (Actuadores);
+  \draw[lin] (rAE) -- (EventosActuadores);
+  \draw[lin] (rEtE) -- (EtiquetasHerramienta);
+  \draw[lin] (rEtE) -- (EventosInventario);
+  \draw[lin] (rOE) -- (Objeto);
+  \draw[lin] (rOE) -- (EtiquetasHerramienta);
+  \end{scope}
+  \path (rUCo) -- node[card, pos=0.55] {1} (Usuario);
+  \path (rUCo) -- node[card, pos=0.55] {N} (ConsultasIA);
+  \path (rUE) -- node[card, pos=0.55] {1} (Usuario);
+  \path (rUE) -- node[card, pos=0.55] {N} (Equipo);
+  \path (rEC) -- node[card, pos=0.55] {1} (Equipo);
+  \path (rEC) -- node[card, pos=0.55] {N} (Caja);
+  \path (rUC) -- node[card, pos=0.55] {N} (Usuario);
+  \path (rUC) -- node[card, pos=0.55] {M} (Caja);
+  \path (rUH) -- node[card, pos=0.55] {1} (Usuario);
+  \path (rUH) -- node[card, pos=0.55] {N} (Historial);
+  \path (rHC) -- node[card, pos=0.55] {1} (Caja);
+  \path (rHC) -- node[card, pos=0.55] {N} (Historial);
+  \path (rUR) -- node[card, pos=0.55] {1} (Usuario);
+  \path (rUR) -- node[card, pos=0.55] {N} (RFID);
+  \path (rRA) -- node[card, pos=0.55] {1} (RFID);
+  \path (rRA) -- node[card, pos=0.55] {N} (Accesos);
+  \path (rCA) -- node[card, pos=0.55] {1} (Caja);
+  \path (rCA) -- node[card, pos=0.55] {N} (Accesos);
+  \path (rCCt) -- node[card, pos=0.55] {1} (Controladores);
+  \path (rCCt) -- node[card, pos=0.55] {1} (Caja);
+  \path (rCtS) -- node[card, pos=0.55] {1} (Controladores);
+  \path (rCtS) -- node[card, pos=0.55] {N} (Sensores);
+  \path (rCtA) -- node[card, pos=0.55] {1} (Controladores);
+  \path (rCtA) -- node[card, pos=0.55] {N} (Actuadores);
+  \path (rSL) -- node[card, pos=0.55] {1} (Sensores);
+  \path (rSL) -- node[card, pos=0.55] {N} (LecturasSensores);
+  \path (rSE) -- node[card, pos=0.55] {1} (Sensores);
+  \path (rSE) -- node[card, pos=0.55] {N} (EventosInventario);
+  \path (rAE) -- node[card, pos=0.55] {1} (Actuadores);
+  \path (rAE) -- node[card, pos=0.55] {N} (EventosActuadores);
+  \path (rEtE) -- node[card, pos=0.55] {1} (EtiquetasHerramienta);
+  \path (rEtE) -- node[card, pos=0.55] {N} (EventosInventario);
+  \path (rOE) -- node[card, pos=0.55] {1} (Objeto);
+  \path (rOE) -- node[card, pos=0.55] {N} (EtiquetasHerramienta);
+\end{tikzpicture}}
+\captionof{figure}{Modelo entidad-relación final de la base de datos (simplificado, sin atributos; el modelo completo se muestra en el \ref{anx:er-completo}).}
+\label{fig:bd-final}
+\end{center}
+\begin{multicols}{2}
+
+Haciendo uso de este modelo, se construyó la base de datos en AIVEN, la cual se encuentra en la nube y es accesible desde cualquier lugar. La base de datos contiene todas las tablas necesarias para almacenar la información de los usuarios, equipos, cajas, sensores, actuadores y demás elementos del sistema. Además, se implementaron las relaciones entre las tablas para garantizar la integridad de los datos y facilitar las consultas necesarias para el funcionamiento del sistema. 
+
+Cabe destacar que la base de datos fue transformada para tenerla en la 3FN (Tercera Forma Normal), lo que permite reducir la redundancia de datos y mejorar la eficiencia en las consultas; prevenir anomalías. Esto se logró mediante la normalización de las tablas y la eliminación de dependencias funcionales innecesarias, pasando de un modelo de tablas a la versión que vemos en la versión final.

@@ -1,0 +1,74 @@
+% Placeholder text until real content is written
+% global: the ER figure closes multicols, which would otherwise drop this macro
+\gdef\loremipsum{Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\par}
+
+\section{Propuesta}
+
+\subsection{Metodología}
+Se propone hacer uso de la metodología ágil SCRUM, la cual permite un desarrollo iterativo e incremental del proyecto, fomentando la colaboración entre los miembros del equipo y la adaptación a cambios en los requerimientos del cliente. Esta metodología se basa en ciclos de trabajo cortos llamados \textit{sprints}, donde se planifican, desarrollan y revisan funcionalidades específicas del proyecto. Para este contexto, estos sprints tendrán una duración de dos semanas, alineandose a las fechas de los entregables establecidos en el cronograma del proyecto.
+
+\subsection{Técnicas y Herramientas de Ingeniería Empleadas}
+Para garantizar el funcionamiento y la calidad del proyecto, se emplearán diversas técnicas y herramientas de ingeniería. Principalmente, en el desarrollo del proyecto se utilizó el control de versiones de Git, el cual permite llevar un registro de los cambios realizados en el código. Tambien de la herramienta platformIO, la cual permite la integración de distintos builds del propio firmware del proyecto, creación de librerías y la integración con cualquier IDE de desarrollo. Para documentación, se utilizó \LaTeX, el cuál permite crear documentos de alta calidad tipográfica, facilitando la manutención de un formato uniforme y profesional. De diseño, se hizo uso de SolidWorks, el cuál nos permitió diseñar la caja en sí. Por último, para realizar cortes de la caja, se utilizó software especializado de cortadura láser, el cual nos permitió realizar cortes precisos y de alta calidad en los materiales utilizados para la construcción de la caja.
+
+\subsection{Infraestructura}
+En sí, el proyecto sigue una infraestructura de desarrollo IoT basada en nube. En AIVEN, se encuentra nuestra base de datos MySQL, la cual nos permite almacenar y gestionar los datos de las cajas de manera eficiente y segura. En el hardware, nosotros hicimos uso de una infraestructura digital en haciendo uso de ESPNOW. Un ESP maestro es el que le manda información a la base de datos, mientras que los ESPs esclavos son los que recogen la información de los sensores y se la envían al maestro. Esta información es enviada por medio de una serialización de datos; 64 bits de información son enviados en un paquete de datos, los cuales son deserializados por el maestro y enviados a la base de datos. 
+
+\begin{center}
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  % arrow tips written out: Spanish babel makes < and > active inside \resizebox
+  punta/.style={-{Stealth[length=2.2mm, width=1.6mm]}},
+  comp/.style={rectangle, rounded corners=2pt, draw=lvlRoleBorder, fill=white, line width=0.7pt, minimum width=2.5cm, minimum height=0.95cm, align=center},
+  db/.style={cylinder, shape border rotate=90, aspect=0.22, draw=lvlRoleBorder, fill=lvlSectorFill, line width=0.7pt, minimum width=2.5cm, minimum height=1.15cm, align=center},
+  capa/.style={rectangle, rounded corners=3pt, fill=rowgray, draw=lvlRoleFill, inner xsep=7pt, inner ysep=11pt},
+  capatxt/.style={font=\sffamily\bfseries\tiny, text=lvlRoleBorder, anchor=north west, inner sep=3pt},
+  etq/.style={fill=white, inner sep=1.5pt, font=\sffamily\tiny, text=lvlRoleText},
+  wifi/.style={punta, line width=0.8pt, draw=lvlSectorBorder},
+  ro/.style={punta, line width=0.8pt, draw=red!70!black, dashed},
+  espnow/.style={punta, line width=0.8pt, draw=lvlToolBorder},
+  https/.style={{Stealth[length=2.2mm, width=1.6mm]}-{Stealth[length=2.2mm, width=1.6mm]}, line width=0.8pt, draw=lvlRoleBorder}
+]
+  % --- Componentes ---
+  \newcommand{\estado}[1]{{\tiny\color{lvlRoleBorder}\mdseries #1}}
+  \node[db] (DB) at (0,0) {\textbf{MySQL}\\[-1pt]\estado{Aiven}};
+  \node[comp] (D) at (4.2,0) {\textbf{Dashboard}};
+  \node[comp, fill=lvlRoleFill] (M) at (0,-2.6) {\textbf{ESP Maestro}\\[-1pt]\estado{Siempre prendido}};
+  \node[comp, fill=lvlToolFill!45] (E1) at (-1.8,-5.0) {\textbf{ESP Esclavo \#1}\\[-1pt]\estado{Dormido hasta mandar datos}};
+  \node[comp, fill=lvlToolFill!45] (E2) at (1.8,-5.0) {\textbf{ESP Esclavo \#2}\\[-1pt]\estado{Dormido hasta mandar datos}};
+
+  % --- Capas (detras de los componentes) ---
+  \begin{scope}[on background layer]
+    % same horizontal extent for every tier
+    \node[capa, fit={(E1.west |- DB.north) (D.east |- DB.south)}] (Cn) {};
+    \node[capa, fit={(E1.west |- M.north) (D.east |- M.south)}] (Cg) {};
+    \node[capa, fit={(E1.west |- E1.north) (D.east |- E1.south)}] (Cd) {};
+  \end{scope}
+  \node[capatxt] at (Cn.north west) {NUBE};
+  \node[capatxt] at (Cg.north west) {GATEWAY};
+  \node[capatxt] at (Cd.north west) {NODOS};
+
+  % --- Enlaces ---
+  \draw[https] (DB.east) -- (D.west);
+  \draw[wifi] ([xshift=-5mm]M.north) -- node[etq] {Wi-Fi} ([xshift=-5mm]DB.south);
+  \draw[ro] ([xshift=5mm]DB.south) -- node[etq, text=red!70!black] {RO} ([xshift=5mm]M.north);
+  \draw[espnow] (E1.north) |- node[etq, pos=0.25] {64\,b} ([yshift=-1.5mm]M.west);
+  \draw[espnow] (E2.north) |- node[etq, pos=0.25] {64\,b} ([yshift=-1.5mm]M.east);
+
+  % --- Leyenda ---
+  \matrix[below=4mm of Cd, anchor=north, column sep=2pt, ampersand replacement=\&, row sep=1pt,
+          nodes={font=\sffamily\tiny, anchor=west, inner sep=1pt}] {
+    \draw[wifi] (0,0) -- (0.5,0); \& \node{Wi-Fi}; \&
+    \draw[ro] (0,0) -- (0.5,0); \& \node{RO: solo lectura}; \\
+    \draw[espnow] (0,0) -- (0.5,0); \& \node{ESP-NOW}; \&
+    \draw[https] (0,0) -- (0.5,0); \& \node{Bidireccional}; \\
+  };
+\end{tikzpicture}}
+\captionof{figure}{Estructura de la infraestructura del proyecto.}
+\label{fig:infraestructura}
+\end{center}
+
+Con esta infraestructura, se busca garantizar la eficiencia y confiabilidad del sistema, permitiendo una comunicación fluida entre los distintos componentes y asegurando que los datos recopilados por los sensores sean almacenados de manera segura en la base de datos para su posterior análisis y visualización en el dashboard.
+
+\subsection{Recursos Utilizados}
+Previamente se menciono el uso de AIVEN, el cual es un servicio de base de datos en la nube que nos permite almacenar y gestionar los datos de manera eficiente. Más que nada, se utilizó su API para poder hacer uso de la base de datos de manera directa sin la necesidad de tener un servidor propio. Ademas de esto, se hizo uso de las herramientas de desarrollo (SDK) de la ESP32 para la programación de los microcontroladores. Y por último, para pruebas iniciales, se utilizó SwaggerAPI para poder hacer pruebas de la API de AIVEN y verificar que los datos se estaban enviando correctamente a la base de datos.

@@ -1,31 +1,31 @@
-
+\thispagestyle{portada}
 \begin{center}
-    \includesvg[width=0.8\textwidth]{\nat{tecnologico-de-monterrey-blue.svg}}
-\end{center}
-\vspace*{2cm}
+    \includesvg[width=0.5\textwidth]{\nat{tecnologico-de-monterrey-blue.svg}}
 
-\begin{center}
+    \vspace{0.8cm}
     {\huge \textbf{ToolNest} \par}
-    {\LARGE \textbf{Administración del Reto - Etapa \#1} \par}
-    \vspace{1.5cm}
-    {\Large
-    Elena María Barrios Jordan - A01771338\\
-    Jared Aldana Palacios - A00844802\\
-    Diego Javier Martínez Sánchez - A00845422\\  
-    Andrés Rodríguez Cantú - A01287002\\
-    \large
-    Equipo \#1
+    \vspace{0.2cm}
+    {\Large \textbf{Caja inteligente con RFID UHF y NodeMCU para el control de\\
+    herramientas compartidas en el sector industrial\\
+    mediante registro en la nube} \par}
 
+    \vspace{0.6cm}
+    \newcommand{\autor}[2]{\parbox[t]{0.245\textwidth}{\centering #1\\\textit{Tecnológico de Monterrey}\\Monterrey, México\\#2\\#2@tec.mx}}
+    {\small
+    \autor{Elena María Barrios Jordan}{A01771338}\hfill
+    \autor{Jared Aldana Palacios}{A00844802}\hfill
+    \autor{Diego Javier Martínez Sánchez}{A00845422}\hfill
+    \autor{Andrés Rodríguez Cantú}{A01287002}\par}
 
-
-    \par}
-    \vspace{1cm}
-    {\large \today \par}
-    Implementación de internet de las cosas (Gpo 506)
-
-
-    A dirección del Dr. Raúl Peña Ortega \& Mtro. Martín Francisco Noriega Moreno
-
+    \vspace{0.4cm}
+    {\small Equipo \#1 \quad\textbullet\quad \today\\
+    Implementación de internet de las cosas (Gpo 506)\\
+    A dirección del Dr. Raúl Peña Ortega \& Mtro. Martín Francisco Noriega Moreno\par}
 \end{center}
-\onehalfspacing
-\setlength{\parindent}{0pt}
+
+\section*{Abstract}
+\noindent\fcolorbox{lvlSectorBorder}{lvlSectorFill}{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{\small\setlength{\parindent}{0pt}
+En talleres, plantas y laboratorios, las herramientas compartidas se pierden, se duplican o no se sabe quién las tiene, lo que obliga a revisar el inventario manualmente y a comprar equipo redundante. Alineado con el ODS 9 (Industria, innovación e infraestructura), este proyecto desarrolla ToolNest, una caja inteligente que identifica sin contacto las herramientas que contiene mediante un lector RFID UHF YRM100, controla el acceso a ellas y registra sus movimientos en la nube. El desarrollo siguió la metodología SCRUM con sprints de dos semanas. Microcontroladores ESP esclavos envían los datos de los sensores por ESP-NOW a un ESP maestro, que los guarda en una base de datos MySQL en Aiven normalizada a la 3FN. La contribución principal es una solución de bajo costo que vincula cada etiqueta RFID con un objeto, una caja, un equipo y un usuario, y que registra cada retiro y devolución en un historial consultable desde un dashboard web. Como resultado, la caja cumple los requerimientos de diseño y funcionalidad de la propuesta, la información se almacena y consulta correctamente, y el sistema detecta alrededor de diez objetos antes de que el YRM100 se sature, quedando como base escalable para el control de inventario.}}
+
+\vspace{6pt}
+\noindent\textsc{Keywords:}\quad IoT, RFID UHF, NodeMCU (ESP8266), Base de datos en la nube, ODS 9, ESP-NOW, Gestión de herramientas

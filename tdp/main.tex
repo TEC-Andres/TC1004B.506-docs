@@ -1,28 +1,28 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 % biblatex configured in librerias/lib.tex
-\usepackage[utf8]{inputenc}
 \input{librerias/lib}
 \input{librerias/comandos}
 \input{librerias/estilos}
-\usepackage{tikz}
-\usetikzlibrary{mindmap, trees}
 \addbibresource{bib/references.bib}
 
 \begin{document}
-\vspace*{1.5cm}
 \input{documento/portada}
-\newpage
-\input{documento/indice}
-\newpage
-\input{documento/fase1/0x00-ODS}
-\input{documento/fase1/0x01-Investigacion}
-\newpage
-\input{documento/fase1/0x02-tablaDeComparacion}
-\newpage
-\input{documento/fase1/0x03-propuesta}
-\input{documento/fase1/0x04-conclusiones}
+\begin{multicols}{2}
+\input{documento/fase1/0x00-introduccion}
+\input{documento/fase1/0x01-marcoTeorico}
+\input{documento/fase2/0x00-propuesta}
+\input{documento/fase3/0x00-resultados}
+\input{documento/fase3/0x02-resultadosConclusion}
+\end{multicols}
 
-\printbibliography
+\newpage
+\begin{multicols}{2}
+\small
+\printbibheading[title={Referencias}]
+\printbibliography[keyword=ods, heading=subbibliography, title={Impacto ODS e industria}]
+\printbibliography[keyword=rfid, heading=subbibliography, title={IoT, RFID y sensores}]
+\printbibliography[keyword=hw, heading=subbibliography, title={Hardware, redes y bases de datos}]
+\end{multicols}
 \input{documento/anexos}
 
 \end{document}
