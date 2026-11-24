@@ -1,0 +1,51 @@
+\section{Introducción}
+
+\subsection{Contexto General}
+La industria manufacturera es uno de los motores del desarrollo económico, tecnológico y social, y atraviesa una transformación impulsada por la automatización y la Industria 4.0. Entre 2015 y 2025 el valor agregado de la manufactura por persona creció 18.1\,\%, mientras que su participación en el empleo mundial bajó de 14.3\,\% a 13.7\,\%; es decir, la industria se vuelve más intensiva en capital y tecnología \parencite{un_goal9_2026}. Esta tecnología no sustituye por completo al trabajo humano: lo complementa y exige nuevas habilidades de operación y supervisión de equipos \parencite{oit_ia_manufactura_2026}.
+
+En México, el sector industrial representó cerca del 31.8\,\% del PIB en 2024 \parencite{banco_mundial_industria_mexico_2025}, y en octubre de 2025 los establecimientos manufactureros registrados empleaban a 2,327,216 obreros y técnicos, que acumularon alrededor de 479 millones de horas trabajadas en ese mes \parencite{inegi_immex_2025}. En Nuevo León, entre enero y julio de 2026 se generaron 26,268 empleos manufactureros, el 64.5\,\% de todos los empleos creados en el estado: dos de cada tres nuevos puestos \parencite{gob_nl_ano_manufacturero_2026}; tan solo entre enero y agosto se sumaron 31,585 empleos formales en el sector \parencite{gob_nl_empleo_septiembre_2026}.
+
+Detrás de estas cifras hay una gran cantidad de personal técnico que, a diario, toma, usa y devuelve herramientas compartidas. Su control suele ser manual (bitácoras en papel o revisiones visuales), lo que provoca pérdidas, tiempo invertido en buscar equipo y compras redundantes. El Internet de las Cosas (IoT) y la identificación por radiofrecuencia (RFID) permiten automatizar esta tarea a bajo costo.
+
+\subsection{Delimitación del Objeto de Estudio}
+\begin{center}
+  \includesvg[width=0.4\linewidth]{fase1/SDG9.svg}
+  \captionof{figure}{ODS \#9: Industria, innovación e infraestructura.}
+  \label{fig:ods9}
+\end{center}
+
+El proyecto se vincula con el Objetivo de Desarrollo Sostenible 9 (\figref{fig:ods9}), que busca construir infraestructuras resilientes, promover la industrialización sostenible y fomentar la innovación \parencite{un_desarrollo_sostenible_2015}. En particular atiende dos metas:
+\begin{itemize}[leftmargin=1.2em]
+    \item \textbf{Meta 9.4:} modernizar la infraestructura y reconvertir las industrias para que usen los recursos con mayor eficacia y adopten tecnologías limpias. Compartir herramientas en lugar de duplicarlas reduce el consumo de recursos.
+    \item \textbf{Meta 9.b:} apoyar el desarrollo tecnológico, la investigación y la innovación nacionales en países en desarrollo. ToolNest se construye con componentes accesibles y tecnología abierta.
+\end{itemize}
+A partir de un mapa mental de los sectores, roles y herramientas beneficiados por el ODS 9 elaborado en la Etapa~1, el objeto de estudio se delimita al \textbf{personal técnico del sector industrial} (talleres, mantenimiento y laboratorios) que comparte herramientas de valor como taladros o multímetros, en el área metropolitana de Monterrey, Nuevo León (\figref{fig:rama-enfoque}).
+
+\begin{center}
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}
+  \node[raiz] (R) at (0,0) {ODS \#9\\[2pt] Industria, innovación\\e infraestructura};
+  \node[sector] (S) at (4,0) {Sector industrial};
+  \node[rol] (P) at (7.6,0) {Personal técnico};
+  \node[herr] (T1) at (10.8,0.7) {Taladro};
+  \node[herr] (T2) at (10.8,-0.7) {Multímetro};
+  \draw[flecha, lvlSectorBorder] (R) -- (S);
+  \draw[flecha, lvlRoleBorder] (S) -- (P);
+  \draw[flecha, lvlToolBorder] (P.east) -- ++(0.5,0) |- (T1);
+  \draw[flecha, lvlToolBorder] (P.east) -- ++(0.5,0) |- (T2);
+\end{tikzpicture}}
+\captionof{figure}{Rama de enfoque del proyecto a partir del mapa mental.}
+\label{fig:rama-enfoque}
+\end{center}
+
+\subsection{Planteamiento del Problema}
+\begin{quote}
+\textit{¿Cómo puede un sistema IoT basado en identificación RFID UHF y un microcontrolador NodeMCU mejorar el control, la disponibilidad y la trazabilidad de las herramientas compartidas por el personal técnico del sector industrial?}
+\end{quote}
+
+\subsection{Justificación}
+\textbf{Técnica:} la RFID UHF permite leer varias etiquetas a la vez, sin línea de vista y a distancias de varios metros \parencite{finkenzeller_rfid_2010}, lo que hace posible saber qué hay dentro de una caja sin abrirla ni escanear objeto por objeto. Microcontroladores con Wi-Fi como el ESP8266 permiten enviar esos datos a la nube con un costo de hardware bajo \parencite{gueye_pollution_2024}.
+
+\textbf{Económica:} compartir un conjunto de herramientas entre varias personas o empresas evita comprar equipo redundante, y registrar automáticamente cada retiro reduce pérdidas y tiempo de búsqueda. Las soluciones comerciales revisadas en la Etapa~1 (rastreadores Bluetooth como Milwaukee TICK o Bosch TrackTag, y gabinetes como Snap-on ATC o CribMaster) son, o muy limitadas (solo localizan, sin control de acceso), o costosas y orientadas a grandes plantas.
+
+\textbf{Social:} la solución no reemplaza al técnico, sino que libera tiempo de su jornada y establece responsabilidades claras sobre el uso del equipo, lo que facilita que estudiantes, talleres pequeños y empresas emergentes accedan a herramientas que de otro modo no podrían costear.

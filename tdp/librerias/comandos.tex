@@ -107,9 +107,13 @@
 % ---------------------------------------------------------------------------
 \pagestyle{fancy}
 \fancyhf{}
-\fancyfoot[R]{\thepage\hspace{-2cm}}
+\fancyhead[L]{\includesvg[height=30pt]{tecnologico-de-monterrey-blue.svg}}
+\fancyhead[R]{\includesvg[height=30pt]{fase1/toolnest.svg}}
+\fancyfoot[R]{\thepage}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
+% Portada: sin encabezado, solo número de página
+\fancypagestyle{portada}{\fancyhf{}\fancyfoot[R]{\thepage}}
 
 % \pieDePagina{texto}: agrega "texto" como nota al pie de la página donde se
 % escribe el comando, y solo de esa página. La nota se coloca al final del

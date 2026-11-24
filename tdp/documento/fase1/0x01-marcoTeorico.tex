@@ -1,0 +1,65 @@
+\subsection{Marco Teórico / Revisión Bibliográfica}
+
+\subsubsection{Internet de las Cosas (IoT)}
+Paradigma en el que objetos físicos con sensores, actuadores y conectividad recolectan datos y los intercambian a través de Internet para ser procesados y visualizados en la nube. Una arquitectura IoT típica se organiza en capas: dispositivos (sensado y actuación), red (comunicación), y servicios o aplicación (almacenamiento, análisis e interfaz). La comunicación entre capas se apoya en la pila TCP/IP y protocolos de aplicación como HTTP.
+
+\subsubsection{RFID UHF}
+Un sistema RFID consta de un lector, una antena y etiquetas (\textit{tags}) con un identificador único. En la banda UHF (860--960\,MHz) las etiquetas pasivas se alimentan del campo del lector y responden por retrodispersión; los algoritmos anticolisión permiten inventariar muchas etiquetas por segundo \parencite{finkenzeller_rfid_2010}. El protocolo de aire es el EPC UHF Gen2, equivalente a ISO/IEC 18000-63. ToolNest usa el módulo YRM100, que reporta una distancia de lectura estable de 0 a 6\,m y más de 50 etiquetas por segundo \parencite{yrm100_datasheet}. Una limitación relevante es que las superficies metálicas reflejan las ondas y degradan la lectura de etiquetas convencionales, por lo que las herramientas metálicas requieren etiquetas \textit{on-metal} o una colocación cuidadosa \parencite{pereira_onmetal_2024}.
+
+\subsubsection{Microcontrolador NodeMCU}
+Tarjeta de desarrollo basada en el SoC ESP8266EX de Espressif, con procesador de 32 bits a 80/160\,MHz, Wi-Fi 802.11 b/g/n integrado y puertos UART, I\textsuperscript{2}C y GPIO \parencite{espressif_esp8266ex}. Se programa en C/C++ con el ecosistema de Arduino; en este proyecto actúa como cliente Wi-Fi que se conecta directamente al servidor MySQL.
+
+\subsubsection{Sensores y actuadores}
+Además del YRM100, el sistema contempla un lector de credenciales para autenticar al usuario, sensores infrarrojos para detectar apertura forzada y fotorresistencias. Como actuadores usa un servomotor para la cerradura, LEDs, un buzzer y una pantalla LCD 16$\times$2 con controlador HD44780, conectada por I\textsuperscript{2}C mediante el expansor PCF8574 para ahorrar pines. Los datos se almacenan en una base de datos relacional MySQL administrada en Aiven \parencite{aiven_mysql}.
+
+\subsubsection{Proyectos relacionados}
+\textcite{dejesuspacheco_rfid_2023} desarrollaron un sistema RFID de bajo costo y código abierto para monitorear líneas de producción; en un caso de estudio en planta lograron integrar información del piso de producción en tiempo real para la toma de decisiones. ToolNest comparte el enfoque de bajo costo, pero lo aplica al control de herramientas y no al flujo de producción.
+
+\textcite{bandara_lowcost_2024} diseñaron un sistema RFID para el inventario de equipo de laboratorio con base de datos en la nube e interfaz gráfica, mejorando la rendición de cuentas mediante historial y rastreo en tiempo real. Es el antecedente más cercano; ToolNest añade control de acceso físico y una caja cerrada como unidad de inventario.
+
+\textcite{bousselmi_inventory_2024} propusieron una aplicación IoT con RFID y Raspberry Pi 4 para inventario de almacén con supervisión web, y reportaron mejoras en la precisión del inventario y menor costo de mano de obra. ToolNest sustituye la Raspberry Pi por una NodeMCU, más barata y de menor consumo.
+
+\textcite{gannamraju_library_2021} automatizaron préstamos y devoluciones de libros con RFID, ESP8266 y una base de datos con portal de consulta, y \textcite{basciftci_library_2021} reportaron una reducción aproximada de 70--80\,\% en tiempo y trabajo con un sistema RFID similar. \textcite{achary_library_2021} analizó los parámetros que degradan el desempeño RFID y propuso técnicas para mejorarlo. El modelo préstamo--devolución de las bibliotecas es análogo al retiro--devolución de herramientas que ToolNest registra.
+
+\textcite{cernilova_goose_2023} validaron un sistema IoT con RFID UHF en un entorno real y obtuvieron una exactitud de 99.78\,\% y una sensibilidad de 95.13\,\%; su metodología de validación con métricas de detección sirve de referencia para evaluar ToolNest. \textcite{gueye_pollution_2024} demostraron que una NodeMCU puede enviar datos a un servidor vía Wi-Fi y HTTP durante una campaña de un mes, lo que respalda su uso en un prototipo de bajo costo.
+
+En el ámbito comercial, la Etapa~1 comparó 12 soluciones (Anexo~1); la \autoref{tab:comerciales} resume las más representativas frente a ToolNest.
+
+\begin{center}
+\captionof{table}{Soluciones comerciales frente a ToolNest.}
+\label{tab:comerciales}
+\rowcolors{2}{rowgray}{white}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{headerblue}
+\textcolor{white}{\textbf{Solución}} & \textcolor{white}{\textbf{Identificación}} & \textcolor{white}{\textbf{Control de acceso}} \\
+\hline
+Milwaukee TICK & BLE (proximidad) & No \\
+Hilti ON!Track & BLE + gateway & No \\
+Snap-on ATC & Cámaras, tarjeta & Cerraduras \\
+CribMaster & RFID, credencial & Lockers \\
+\textbf{ToolNest} & \textbf{RFID UHF} & \textbf{Credencial + servo} \\
+\hline
+\end{tabularx}
+\end{center}
+\pieDePagina{Tabla \ref{tab:comerciales} creada a partir de datos de ChatGPT (OpenAI), utilizado con fines educativos.}
+
+Finalmente, \textcite{soarespereira_rfid_2024} identificaron, mediante un análisis bibliométrico, a la RFID como tecnología habilitadora de la Industria 4.0, y \textcite{pereira_onmetal_2024} encontraron que las etiquetas flexibles en UHF dominan la investigación para superficies metálicas, un reto directo para etiquetar herramientas.
+
+\subsection{Objetivos}
+\textbf{Objetivo General:} Desarrollar un prototipo funcional de ToolNest que identifique herramientas, controle el acceso y registre sus movimientos mediante sensores, actuadores, una base de datos en la nube y una interfaz de consulta, para mejorar el aprovechamiento de herramientas compartidas en relación con el ODS~9.
+
+\textbf{Objetivos Específicos:}
+\begin{enumerate}[leftmargin=1.5em, label=\arabic*.]
+    \item Desarrollar el hardware: conectar y probar de forma individual cada par sensor--actuador con la NodeMCU.
+    \item Implementar la identificación de herramientas con RFID UHF para registrar su disponibilidad, retiros y devoluciones.
+    \item Integrar la validación de credenciales con el mecanismo de apertura y las alertas de seguridad.
+    \item Integrar el software: comunicar el sistema con una base de datos MySQL para almacenar usuarios, herramientas, movimientos y eventos.
+    \item Procesar los datos en una interfaz con al menos cinco indicadores: disponibilidad, herramientas retiradas, frecuencia de uso, tiempo de préstamo y eventos de seguridad.
+    \item Construir el prototipo físico, validarlo mediante pruebas de funcionamiento y documentar sus resultados.
+\end{enumerate}
+
+\subsection{Hipótesis}
+Si las herramientas de una caja se identifican mediante RFID UHF y cada cambio se registra automáticamente en una base de datos en la nube, entonces ToolNest detectará correctamente la presencia o ausencia de las herramientas etiquetadas en al menos el 95\,\% de las lecturas y reducirá en al menos un 50\,\% el tiempo necesario para verificar el inventario de la caja respecto a una revisión manual.

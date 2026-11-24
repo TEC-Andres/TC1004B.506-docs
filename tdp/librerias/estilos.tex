@@ -1,34 +1,34 @@
-% Document appearance and typographic setup
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+% Estructura del reporte técnico (ALAS) con la tipografía y paleta de la Etapa 1
+% Tipografía: Latin Modern (la predeterminada de XeLaTeX)
 \usepackage{microtype}
 \usepackage{geometry}
-\geometry{a4paper, margin=0.8in}
+\geometry{a4paper, margin=0.8in, top=1in, headheight=34pt, headsep=10pt}
 
 % Paragraph formatting
-\setlength{\parindent}{1.5em}
-\setlength{\parskip}{0pt}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{3pt}
 
 % Two-column layout: enabled manually from the document (do not auto-start)
 \setlength{\columnsep}{18pt}
 
-% Section/title styling: uppercase small-caps, centered, numbered like "1. INTRODUCTION"
+% Secciones: versalitas centradas, como en la Etapa 1
 \usepackage{titlesec}
-\titleformat{\section}[block]{\normalfont\large\scshape\centering}{\thesection.}{1em}{}
+\titleformat{\section}[block]{\normalfont\large\scshape\centering}{}{0pt}{}
 \titlespacing*{\section}{0pt}{12pt}{6pt}
 
-% Run-in subsections (optional compact style)
-\titleformat{\subsection}[runin]{\normalfont\bfseries}{\thesubsection.}{0.5em}{}
-\titlespacing*{\subsection}{0pt}{6pt}{6pt}
+% Incisos: "a) Contexto General" en versalitas, un nivel menor
+\renewcommand{\thesubsection}{\alph{subsection})}
+\titleformat{\subsection}[block]{\normalfont\normalsize\scshape\centering}{\thesubsection}{0.4em}{}
+\titlespacing*{\subsection}{0pt}{8pt}{4pt}
 
-% Run-in subsubsections (match subsection style)
-\titleformat{\subsubsection}[runin]{\normalfont\bfseries}{\thesubsubsection.}{0.5em}{}
-\titlespacing*{\subsubsection}{0pt}{6pt}{6pt}
+\titleformat{\subsubsection}[runin]{\normalfont\bfseries}{}{0pt}{}[:]
+\titlespacing*{\subsubsection}{0pt}{3pt}{0.5em}
+
+\hypersetup{hidelinks}
+\usepackage{xurl}
 
 % Make figure/table captions slightly smaller
 \usepackage[font=small,labelfont=bf]{caption}
-
-% Improve line breaks and justification (keep default font hyphenation)
 
 % Keep floats reasonably close to text
 \renewcommand{\topfraction}{0.9}
@@ -41,5 +41,30 @@
 % Table colors
 \definecolor{headerblue}{RGB}{41, 128, 185}
 \definecolor{rowgray}{RGB}{245, 247, 250}
+
+% Paleta de los diagramas (mapa mental de la Etapa 1)
+\definecolor{lvlRootBg}{HTML}{4f6fb9}
+\definecolor{lvlRootText}{HTML}{F8FAFC}
+\definecolor{lvlRootBorder}{HTML}{0284C7}
+\definecolor{lvlSectorFill}{HTML}{E0F2FE}
+\definecolor{lvlSectorBorder}{HTML}{0284C7}
+\definecolor{lvlSectorText}{HTML}{0369A1}
+\definecolor{lvlRoleFill}{HTML}{F1F5F9}
+\definecolor{lvlRoleBorder}{HTML}{475569}
+\definecolor{lvlRoleText}{HTML}{1E293B}
+\definecolor{lvlToolFill}{HTML}{CCFBF1}
+\definecolor{lvlToolBorder}{HTML}{0D9488}
+\definecolor{lvlToolText}{HTML}{0F766E}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, fit, backgrounds, matrix}
+\tikzset{
+  nodo/.style={rectangle, rounded corners=6pt, line width=1.1pt, align=center, font=\sffamily\bfseries\small, inner sep=6pt},
+  raiz/.style={circle, fill=lvlRootBg, draw=lvlRootBorder, line width=2pt, text=lvlRootText, align=center, font=\sffamily\bfseries\small, inner sep=6pt},
+  sector/.style={nodo, fill=lvlSectorFill, draw=lvlSectorBorder, text=lvlSectorText},
+  rol/.style={nodo, fill=lvlRoleFill, draw=lvlRoleBorder, text=lvlRoleText},
+  herr/.style={nodo, fill=lvlToolFill, draw=lvlToolBorder, text=lvlToolText},
+  flecha/.style={-{Stealth[length=3mm, width=2.2mm]}, line width=1.4pt}
+}
 
 % End of estilos.tex
